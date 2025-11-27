@@ -1,6 +1,6 @@
 // Variables
 const string POSTS_DIR = "./src/posts/";
-const string POST_TEMPLATE = "./src/_post_template.html";
+const string POST_TEMPLATE = "./src/_templates/posts.html";
 const string POSTS_DIR_OUTPUT = "./dist/posts";
 
 const string PAGES_DIR = "./src/";

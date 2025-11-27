@@ -6,12 +6,14 @@
         <title>WhatFor</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="description" content="" />
-        <link rel="stylesheet" type="text/css" href="site.css" />
+        <link rel="stylesheet" type="text/css" href="assets/site.css" />
     </head>
 
     <body>
         <header>
-            <h1><a href="/">WhatFor</a></h1>
+            <h1 id="whatfor">
+                <a href="/">whatfor</a>
+            </h1>
             <nav>
                 <ul>
                     <a href="opinions.html">Opinions</a>
@@ -26,4 +28,83 @@
             <p>No copyright at all. Built by hand. Built to last.</p>
         </footer>
     </body>
+
+    <svg width="0" height="0" style="position: absolute">
+        <defs>
+            <filter id="bubble-outline">
+                <!-- first bubble -->
+                <feMorphology
+                    in="SourceAlpha"
+                    operator="dilate"
+                    <!--radius="4"-->
+                    result="d"
+                >
+                    <animate
+                        attributeName="radius"
+                        values="1;5;1"
+                        dur="3s"
+                        repeatCount="indefinite"
+                    />
+                </feMorphology>
+                <feGaussianBlur in="d" stdDeviation="11" result="b" />
+                <feComponentTransfer in="b" result="f">
+                    <feFuncR type="discrete" tableValues="0 1 1 1" />
+                    <feFuncG type="discrete" tableValues="0 1 1 1" />
+                    <feFuncB type="discrete" tableValues="0 1 1 1" />
+                    <feFuncA type="discrete" tableValues="0 1 1 1" />
+                </feComponentTransfer>
+                <feFlood flood-color="red" result="c" />
+                <feComposite in="c" in2="f" operator="in" result="o" />
+
+                <!-- 2nd bubble -->
+                <feMorphology
+                    in="SourceAlpha"
+                    operator="dilate"
+                    radius="12"
+                    result="d2"
+                >
+                    <animate
+                        attributeName="radius"
+                        values="1;12;1"
+                        dur="3s"
+                        repeatCount="indefinite"
+                    />
+                </feMorphology>
+                <feGaussianBlur in="d2" stdDeviation="12" result="b2" />
+                <feComponentTransfer in="b2" result="f2">
+                    <feFuncR type="discrete" tableValues="0 1 1 1" />
+                    <feFuncG type="discrete" tableValues="0 1 1 1" />
+                    <feFuncB type="discrete" tableValues="0 1 1 1" />
+                    <feFuncA type="discrete" tableValues="0 1 1 1" />
+                </feComponentTransfer>
+                <feFlood flood-color="black" result="c2" />
+                <feComposite in="c2" in2="f2" operator="in" result="o2" />
+
+                <!-- combine both bubbles -->
+                <feMerge out="combined">
+                    <feMergeNode in="o2" />
+                    <feMergeNode in="o" />
+                </feMerge>
+
+                <!-- draw back onto text -->
+                <feMerge>
+                    <feMergeNode in="combined" />
+                    <feMergeNode in="SourceGraphic" />
+                </feMerge>
+            </filter>
+        </defs>
+    </svg>
+
+    <style>
+        #whatfor {
+            padding: var(--space-s);
+            font-family: "Courier New", Courier, monospace;
+            filter: url(#bubble-outline);
+        }
+
+        #whatfor a {
+            color: white;
+            text-decoration: none;
+        }
+    </style>
 </html>
