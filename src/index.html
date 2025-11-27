@@ -12,7 +12,15 @@
     <body>
         <header>
             <h1 id="whatfor">
-                <a href="/">whatfor</a>
+                <a href="/">
+                    <span>w</span>
+                    <span>h</span>
+                    <span>a</span>
+                    <span>t</span>
+                    <span>f</span>
+                    <span>o</span>
+                    <span>r</span>
+                </a>
             </h1>
             <nav>
                 <ul>
@@ -22,27 +30,21 @@
                 </ul>
             </nav>
         </header>
-        <p>Hello</p>
         <footer>
             <hr />
             <p>No copyright at all. Built by hand. Built to last.</p>
         </footer>
     </body>
 
-    <svg width="0" height="0" style="position: absolute">
+    <svg>
         <defs>
             <filter id="bubble-outline">
                 <!-- first bubble -->
-                <feMorphology
-                    in="SourceAlpha"
-                    operator="dilate"
-                    <!--radius="4"-->
-                    result="d"
-                >
+                <feMorphology in="SourceAlpha" operator="dilate" result="d">
                     <animate
                         attributeName="radius"
-                        values="1;5;1"
-                        dur="3s"
+                        values="2;7;2"
+                        dur="2s"
                         repeatCount="indefinite"
                     />
                 </feMorphology>
@@ -57,16 +59,11 @@
                 <feComposite in="c" in2="f" operator="in" result="o" />
 
                 <!-- 2nd bubble -->
-                <feMorphology
-                    in="SourceAlpha"
-                    operator="dilate"
-                    radius="12"
-                    result="d2"
-                >
+                <feMorphology in="SourceAlpha" operator="dilate" result="d2">
                     <animate
                         attributeName="radius"
-                        values="1;12;1"
-                        dur="3s"
+                        values="4;14;4"
+                        dur="2s"
                         repeatCount="indefinite"
                     />
                 </feMorphology>
@@ -77,7 +74,7 @@
                     <feFuncB type="discrete" tableValues="0 1 1 1" />
                     <feFuncA type="discrete" tableValues="0 1 1 1" />
                 </feComponentTransfer>
-                <feFlood flood-color="black" result="c2" />
+                <feFlood flood-color="darkred" result="c2" />
                 <feComposite in="c2" in2="f2" operator="in" result="o2" />
 
                 <!-- combine both bubbles -->
@@ -87,7 +84,7 @@
                 </feMerge>
 
                 <!-- draw back onto text -->
-                <feMerge>
+                <feMerge out="merged">
                     <feMergeNode in="combined" />
                     <feMergeNode in="SourceGraphic" />
                 </feMerge>
@@ -96,15 +93,61 @@
     </svg>
 
     <style>
+        @font-face {
+            font-family: "Pixelify Sans Variable";
+            src: url("assets/pixelify-sans-latin-400-normal.woff2")
+                format("woff");
+        }
+
         #whatfor {
-            padding: var(--space-s);
-            font-family: "Courier New", Courier, monospace;
-            filter: url(#bubble-outline);
+            letter-spacing: -0.05em;
+            margin: 0 auto;
+            margin-bottom: 1em;
+            text-align: center;
+            padding: 8px 0;
+            font-family:
+                "Pixelify Sans Variable", "Courier New", Courier, monospace;
+
+            @media (prefers-reduced-motion: no-preference) {
+                filter: url(#bubble-outline);
+            }
+
+            @media (prefers-reduced-motion: reduce) {
+                background-color: black;
+            }
+
+            & span {
+                display: inline-block;
+                vertical-align: baseline;
+                transition: transform 200ms ease;
+
+                &:hover {
+                    color: black;
+                    text-shadow: white -1px -1px;
+                }
+            }
+
+            & span:nth-child(odd) {
+                transform: translateY(-0.03em);
+
+                &:hover {
+                    transform: translateY(0.05em);
+                }
+            }
+
+            & span:nth-child(even) {
+                transform: translateY(0.03em);
+
+                &:hover {
+                    transform: translateY(-0.05em);
+                }
+            }
         }
 
         #whatfor a {
             color: white;
             text-decoration: none;
+            text-shadow: black 2px 2px;
         }
     </style>
 </html>
