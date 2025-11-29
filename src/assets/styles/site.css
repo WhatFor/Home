@@ -31,12 +31,20 @@ select {
     outline: none;
 }
 
+@font-face {
+    font-family: "Pixelify Sans Variable";
+    src: url("../fonts/pixelify-sans-latin-400-normal.woff2") format("woff");
+}
+
 :root {
     --rem: 12pt;
     --width: 50rem;
     --font-body: 1.3em/1.8 Tahoma, Helvetica, sans-serif;
     --font-head: 1.3em/1.5 "Palatino Linotype", "Palatino", sans-serif;
     --font-code: 1em/1.4 Monaco, monospace;
+
+    --font-pixel-family:
+        "Pixelify Sans Variable", "Courier New", Courier, monospace;
 
     --space-s: 0.4em;
     --space-m: 0.8em;
@@ -117,6 +125,29 @@ body {
 
         & * {
             pointer-events: initial;
+        }
+
+        nav {
+            ul {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                font-family: var(--font-pixel-family);
+                font-size: 1.5em;
+                line-height: 1.2em;
+                text-align: center;
+
+                a {
+                    flex-basis: 0;
+                    flex-grow: 1;
+                    padding: 0px 10px;
+
+                    &:hover {
+                        font-size: 1.05em;
+                    }
+                }
+            }
         }
     }
 }
