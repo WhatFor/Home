@@ -67,3 +67,6 @@ foreach (var assetFile in Directory.GetFiles(ASSETS_DIR, "*", new EnumerationOpt
     Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
     File.Copy(assetFile, outputFile, overwrite: true);
 }
+
+// Output robots.txt
+File.Copy(Path.Combine(PAGES_DIR, "robots.txt"), Path.Combine(PAGES_DIR_OUTPUT, "robots.txt"), overwrite: true);

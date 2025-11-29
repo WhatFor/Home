@@ -38,12 +38,23 @@
         </header>
         <main></main>
         <footer>
-            <hr />
-            <p>No copyright at all. Built by hand. Built to last.</p>
+            <p>
+                Licensed under
+                <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                    >CC BY-NC-SA 4.0.</a
+                >
+                <a href="https://www.w3.org/Provider/Style/URI"
+                    >Cool URIs don't change.</a
+                >
+                This page is
+                <a href="https://jeffhuang.com/designed_to_last/"
+                    >designed to last.</a
+                >
+            </p>
         </footer>
     </body>
 
-    <svg>
+    <svg style="width: 0; height: 0; position: absolute">
         <defs>
             <filter id="bubble-outline">
                 <!-- first bubble -->
@@ -111,9 +122,10 @@
             margin: 0 auto;
             margin-bottom: 1em;
             text-align: center;
-            padding: 8px 0;
+            padding: 24px 0;
             font-family:
                 "Pixelify Sans Variable", "Courier New", Courier, monospace;
+            pointer-events: none;
 
             @media (prefers-reduced-motion: no-preference) {
                 filter: url(#bubble-outline);
@@ -127,6 +139,7 @@
                 display: inline-block;
                 vertical-align: baseline;
                 transition: transform 200ms ease;
+                pointer-events: initial;
 
                 &:hover {
                     color: black;
