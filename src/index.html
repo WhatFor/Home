@@ -6,10 +6,16 @@
         <title>WhatFor</title>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="description" content="" />
-        <link rel="stylesheet" type="text/css" href="assets/site.css" />
+        <link rel="stylesheet" type="text/css" href="assets/styles/site.css" />
     </head>
 
     <body>
+        <img class="bg-image" id="banana-bg" src="assets/images/banana.webp" />
+        <img
+            class="bg-image"
+            id="strawberry-bg"
+            src="assets/images/strawberry.webp"
+        />
         <header>
             <h1 id="whatfor">
                 <a href="/">
@@ -30,6 +36,7 @@
                 </ul>
             </nav>
         </header>
+        <main></main>
         <footer>
             <hr />
             <p>No copyright at all. Built by hand. Built to last.</p>
@@ -95,7 +102,7 @@
     <style>
         @font-face {
             font-family: "Pixelify Sans Variable";
-            src: url("assets/pixelify-sans-latin-400-normal.woff2")
+            src: url("assets/fonts/pixelify-sans-latin-400-normal.woff2")
                 format("woff");
         }
 
@@ -148,6 +155,54 @@
             color: white;
             text-decoration: none;
             text-shadow: black 2px 2px;
+        }
+
+        @keyframes banana-anim {
+            from {
+                bottom: -100px;
+                left: -300px;
+            }
+
+            to {
+                bottom: 5200px;
+                left: 5000px;
+            }
+        }
+
+        @keyframes strawberry-anim {
+            from {
+                bottom: -1200px;
+                left: -500px;
+            }
+
+            to {
+                bottom: 4900px;
+                left: 5300px;
+            }
+        }
+
+        .bg-image {
+            z-index: -100;
+            position: fixed;
+            transition: transform 200ms ease;
+            cursor: pointer;
+
+            filter: drop-shadow(8px 8px 0px black);
+
+            &:hover {
+                transform: scale(1.03) rotate(5deg);
+                filter: drop-shadow(10px 10px 1px black);
+            }
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            #strawberry-bg {
+                animation: 358s linear infinite normal strawberry-anim;
+            }
+
+            #banana-bg {
+                animation: 320s linear infinite normal banana-anim;
+            }
         }
     </style>
 </html>

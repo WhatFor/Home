@@ -59,9 +59,11 @@ foreach (var pageFile in Directory.GetFiles(PAGES_DIR, "*.html"))
 // Output assets
 Directory.CreateDirectory(ASSETS_DIR_OUTPUT);
 
-foreach (var assetFile in Directory.GetFiles(ASSETS_DIR, "*"))
+foreach (var assetFile in Directory.GetFiles(ASSETS_DIR, "*", new EnumerationOptions { RecurseSubdirectories = true }))
 {
-    var fileName = Path.GetFileName(assetFile);
-    var outputFile = Path.Combine(ASSETS_DIR_OUTPUT, fileName);
+    var filePath = assetFile.Replace("./src/assets/", "");
+    var outputFile = Path.Combine(ASSETS_DIR_OUTPUT, filePath);
+
+    Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
     File.Copy(assetFile, outputFile, overwrite: true);
 }

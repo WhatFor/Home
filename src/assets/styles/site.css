@@ -60,6 +60,7 @@ select {
 html {
     font-size: var(--rem);
     background: var(--colour-bg);
+    height: 100%;
 
     --bg: aqua;
     background-image:
@@ -71,9 +72,16 @@ html {
     background-size: 100px 100px;
     background-repeat: repeat;
 
+    cursor: url("../images/cursor.png"), auto;
+
     @media (prefers-reduced-motion: no-preference) {
         animation: bg-move 6s linear infinite;
     }
+}
+
+*::selection {
+    color: darkmagenta;
+    background-color: gold;
 }
 
 body {
