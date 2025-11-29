@@ -170,6 +170,11 @@
             font-family: var(--font-pixel-family);
             pointer-events: none;
 
+            @media (max-width: 500px) {
+                padding: 24px 20px;
+                font-size: 2.5em;
+            }
+
             @media (prefers-reduced-motion: no-preference) {
                 filter: url(#bubble-outline);
             }
@@ -239,6 +244,8 @@
 
         .bg-image {
             z-index: -100;
+            bottom: 0;
+            left: -1000px;
             position: fixed;
             transition: transform 200ms ease;
             cursor: pointer;
@@ -251,7 +258,7 @@
             }
         }
 
-        @media (prefers-reduced-motion: no-preference) {
+        @media (prefers-reduced-motion: no-preference) and (min-width: 800px) {
             #strawberry-bg {
                 animation: 358s linear infinite normal strawberry-anim;
             }

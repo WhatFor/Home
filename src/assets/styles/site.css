@@ -82,7 +82,7 @@ html {
 
     cursor: url("../images/cursor.png"), auto;
 
-    @media (prefers-reduced-motion: no-preference) {
+    @media (prefers-reduced-motion: no-preference) and (min-width: 800px) {
         animation: bg-move 6s linear infinite;
     }
 }
