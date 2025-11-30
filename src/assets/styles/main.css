@@ -102,7 +102,7 @@
 @media (prefers-reduced-motion: no-preference) {
     #strawberry-bg {
         will-change: transform;
-        animation: 180s linear 30s infinite normal strawberry-anim;
+        animation: 180s linear 60s infinite normal strawberry-anim;
     }
 
     #banana-bg {
