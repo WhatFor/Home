@@ -10,6 +10,7 @@ const string MAIN_TEMPLATE = "./src/_templates/main.html";
 const string ASSETS_DIR = "./src/assets/";
 const string ASSETS_DIR_OUTPUT = "./dist/assets";
 
+const string POSTS_PLACEHOLDER = "<!--#POSTS#-->";
 const string BODY_PLACEHOLDER = "<!--#CONTENT#-->";
 
 // Helpers
@@ -57,7 +58,8 @@ foreach (var post in postsHtml)
 // Output pages
 var pagesHtml = Directory
     .GetFiles(PAGES_DIR, "*.html")
-    .Select(f => new { Name = Path.GetFileName(f), Content = File.ReadAllText(f) });
+    .Select(f => new { Name = Path.GetFileName(f), Content = File.ReadAllText(f) })
+    .ToList();
 
 foreach (var page in pagesHtml)
 {
@@ -66,8 +68,18 @@ foreach (var page in pagesHtml)
 
     Console.WriteLine($"Page: {page.Name}");
     var pageOutput = mainTemplate.Replace(BODY_PLACEHOLDER, page.Content);
-    var outputFile = Path.Combine(PAGES_DIR_OUTPUT, page.Name);
 
+    // Special handling for the posts.html listing page
+    if (page.Name == "posts.html")
+    {
+        var listing = string.Join(
+            "\r\n",
+            postsHtml.Select(p => $"<a href='posts/{p.Name}'>{Path.GetFileNameWithoutExtension(p.Name)}</a>"));
+
+        pageOutput = pageOutput.Replace(POSTS_PLACEHOLDER, listing);
+    }
+
+    var outputFile = Path.Combine(PAGES_DIR_OUTPUT, page.Name);
     File.WriteAllText(outputFile, pageOutput);
 }
 
