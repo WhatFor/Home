@@ -56,21 +56,25 @@
 
 @keyframes banana-anim {
     from {
-        transform: translate(-400px, 1000px);
+        transform: translate(calc(0vw - 100%), calc(100vh));
+        opacity: 100%;
     }
 
     to {
-        transform: translate(5500px, -5000px);
+        transform: translate(calc(0vw - 100% + 3000px), calc(100vh - 3000px));
+        opacity: 100%;
     }
 }
 
 @keyframes strawberry-anim {
     from {
-        transform: translate(-900px, 2000px);
+        transform: translate(calc(0vw - 100%), calc(100vh));
+        opacity: 100%;
     }
 
     to {
-        transform: translate(5000px, -4000px);
+        transform: translate(calc(0vw - 100% + 3000px), calc(100vh - 3000px));
+        opacity: 100%;
     }
 }
 
@@ -78,9 +82,11 @@
     z-index: -100;
     top: 0;
     left: 0;
+    opacity: 0%;
     position: fixed;
     transform-origin: center;
-    cursor: pointer;
+    pointer-events: none;
+    user-select: none;
 
     filter: drop-shadow(8px 8px 0px black);
 
@@ -97,11 +103,11 @@
 @media (prefers-reduced-motion: no-preference) {
     #strawberry-bg {
         will-change: transform;
-        animation: 350s linear infinite normal strawberry-anim;
+        animation: 180s linear 30s infinite normal strawberry-anim;
     }
 
     #banana-bg {
         will-change: transform;
-        animation: 350s linear infinite normal banana-anim;
+        animation: 180s linear 1s infinite normal banana-anim;
     }
 }
