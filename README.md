@@ -14,3 +14,11 @@ which will:
 - Start a local file server from `./dist` on port `3000`.
 
 The `dev.sh` script invokes both `watch.sh` and `serve.sh`. Watch is responsible for calling `dotnet run build.cs`.
+
+### Deployment
+
+On the target server:
+
+- `git fetch && git pull`
+- `dotnet run build.cs`
+- Point nginx to `./dist`
