@@ -146,13 +146,14 @@ body {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-between;
+                list-style: none;
 
                 font-family: var(--font-pixel-family);
                 font-size: 1.5em;
                 line-height: 1.2em;
                 text-align: center;
 
-                a {
+                li {
                     flex-basis: 0;
                     flex-grow: 1;
                     padding: 0px 10px;
