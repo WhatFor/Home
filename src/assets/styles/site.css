@@ -203,3 +203,7 @@ h5,
 h6 {
     font-size: 1.1em;
 }
+
+table {
+    width: 100%;
+}
