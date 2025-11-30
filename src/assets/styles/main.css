@@ -1,0 +1,105 @@
+#whatfor {
+    letter-spacing: -0.05em;
+    margin: 0 auto;
+    text-align: center;
+    padding: 24px 0;
+    font-family: var(--font-pixel-family);
+    pointer-events: none;
+
+    @media (max-width: 500px) {
+        padding: 24px 20px;
+        font-size: 2.5em;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        filter: url(#bubble-outline);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        background-color: black;
+    }
+
+    & span {
+        display: inline-block;
+        vertical-align: baseline;
+        transition: transform 200ms ease;
+        pointer-events: initial;
+
+        &:hover {
+            color: black;
+            text-shadow: white -1px -1px;
+        }
+    }
+
+    & span:nth-child(odd) {
+        transform: translateY(-0.03em);
+
+        &:hover {
+            transform: translateY(0.05em);
+        }
+    }
+
+    & span:nth-child(even) {
+        transform: translateY(0.03em);
+
+        &:hover {
+            transform: translateY(-0.05em);
+        }
+    }
+}
+
+#whatfor a {
+    color: white;
+    text-decoration: none;
+    text-shadow: black 2px 2px;
+}
+
+@keyframes banana-anim {
+    from {
+        bottom: -100px;
+        left: -300px;
+    }
+
+    to {
+        bottom: 5200px;
+        left: 5000px;
+    }
+}
+
+@keyframes strawberry-anim {
+    from {
+        bottom: -1200px;
+        left: -500px;
+    }
+
+    to {
+        bottom: 4900px;
+        left: 5300px;
+    }
+}
+
+.bg-image {
+    z-index: -100;
+    bottom: 0;
+    left: -1000px;
+    position: fixed;
+    transition: transform 200ms ease;
+    cursor: pointer;
+
+    filter: drop-shadow(8px 8px 0px black);
+
+    &:hover {
+        transform: scale(1.03) rotate(5deg);
+        filter: drop-shadow(10px 10px 1px black);
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 800px) {
+    #strawberry-bg {
+        animation: 358s linear infinite normal strawberry-anim;
+    }
+
+    #banana-bg {
+        animation: 320s linear infinite normal banana-anim;
+    }
+}

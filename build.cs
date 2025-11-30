@@ -5,6 +5,7 @@ const string POSTS_DIR_OUTPUT = "./dist/posts";
 
 const string PAGES_DIR = "./src/";
 const string PAGES_DIR_OUTPUT = "./dist/";
+const string MAIN_TEMPLATE = "./src/_templates/main.html";
 
 const string ASSETS_DIR = "./src/assets/";
 const string ASSETS_DIR_OUTPUT = "./dist/assets";
@@ -14,22 +15,30 @@ const string BODY_PLACEHOLDER = "<!--#CONTENT#-->";
 // Helpers
 bool IsTemplate(string path) => Path.GetFileName(path).StartsWith('_');
 
+string ReadTemplate(string path)
+{
+    if (!File.Exists(path))
+    {
+        throw new InvalidOperationException(
+            $"File {path} does not exist.");
+    }
+
+    var templateHtml = File.ReadAllText(path);
+
+    if (!templateHtml.Contains(BODY_PLACEHOLDER))
+    {
+        throw new InvalidOperationException(
+            $"{path} does not contain body placeholder '{BODY_PLACEHOLDER}'.");
+    }
+
+    return templateHtml;
+}
+
 // Setup
 Directory.CreateDirectory(POSTS_DIR_OUTPUT);
 
-if (!File.Exists(POST_TEMPLATE))
-{
-    throw new InvalidOperationException(
-        $"File {POST_TEMPLATE} does not exist.");
-}
-
-var templateHtml = File.ReadAllText(POST_TEMPLATE);
-
-if (!templateHtml.Contains(BODY_PLACEHOLDER))
-{
-    throw new InvalidOperationException(
-        $"{POST_TEMPLATE} does not contain body placeholder '{BODY_PLACEHOLDER}'.");
-}
+var postTemplate = ReadTemplate(POST_TEMPLATE);
+var mainTemplate = ReadTemplate(MAIN_TEMPLATE);
 
 // Build posts
 var postsHtml = Directory
@@ -38,22 +47,28 @@ var postsHtml = Directory
 
 foreach (var post in postsHtml)
 {
-    Console.WriteLine(post.Name);
-    var postOutput = templateHtml.Replace(BODY_PLACEHOLDER, post.Content);
+    Console.WriteLine($"Post: {post.Name}");
+    var postOutput = postTemplate.Replace(BODY_PLACEHOLDER, post.Content);
     var outputFile = Path.Combine(POSTS_DIR_OUTPUT, post.Name);
 
     File.WriteAllText(outputFile, postOutput);
 }
 
 // Output pages
-foreach (var pageFile in Directory.GetFiles(PAGES_DIR, "*.html"))
+var pagesHtml = Directory
+    .GetFiles(PAGES_DIR, "*.html")
+    .Select(f => new { Name = Path.GetFileName(f), Content = File.ReadAllText(f) });
+
+foreach (var page in pagesHtml)
 {
-    if (IsTemplate(pageFile))
+    if (IsTemplate(page.Name))
         continue;
 
-    var fileName = Path.GetFileName(pageFile);
-    var outputFile = Path.Combine(PAGES_DIR_OUTPUT, fileName);
-    File.Copy(pageFile, outputFile, overwrite: true);
+    Console.WriteLine($"Page: {page.Name}");
+    var pageOutput = mainTemplate.Replace(BODY_PLACEHOLDER, page.Content);
+    var outputFile = Path.Combine(PAGES_DIR_OUTPUT, page.Name);
+
+    File.WriteAllText(outputFile, pageOutput);
 }
 
 // Output assets
@@ -64,7 +79,7 @@ foreach (var assetFile in Directory.GetFiles(ASSETS_DIR, "*", new EnumerationOpt
     var filePath = assetFile.Replace("./src/assets/", "");
     var outputFile = Path.Combine(ASSETS_DIR_OUTPUT, filePath);
 
-    Directory.CreateDirectory(Path.GetDirectoryName(outputFile));
+    Directory.CreateDirectory(Path.GetDirectoryName(outputFile)!);
     File.Copy(assetFile, outputFile, overwrite: true);
 }
 
