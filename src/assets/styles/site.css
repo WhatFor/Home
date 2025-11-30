@@ -33,6 +33,7 @@ select {
 @font-face {
     font-family: "Pixelify Sans Variable";
     src: url("../fonts/pixelify-sans-latin-400-normal.woff2") format("woff");
+    font-display: swap;
 }
 
 :root {
@@ -55,19 +56,31 @@ select {
     --colour-dark: black;
 }
 
-@keyframes bg-move {
-    0% {
-        background-position: 0 0;
-    }
-    to {
-        background-position: 100px -100px;
-    }
-}
-
 html {
     font-size: var(--rem);
     background: var(--colour-bg);
     height: 100%;
+    cursor: url("../images/cursor.png"), auto;
+}
+
+@keyframes bg-move {
+    0% {
+        transform: translate(0, 0);
+        /*background-position: 0 0;*/
+    }
+    to {
+        transform: translate(100px, -100px);
+        /*background-position: 100px -100px;*/
+    }
+}
+
+#bg-tiles {
+    z-index: -110;
+    position: fixed;
+    top: -100px;
+    bottom: -100px;
+    left: -100px;
+    right: -100px;
 
     --bg: aqua;
     background-image:
@@ -79,9 +92,8 @@ html {
     background-size: 100px 100px;
     background-repeat: repeat;
 
-    cursor: url("../images/cursor.png"), auto;
-
-    @media (prefers-reduced-motion: no-preference) and (min-width: 800px) {
+    @media (prefers-reduced-motion: no-preference) {
+        will-change: transform;
         animation: bg-move 6s linear infinite;
     }
 }

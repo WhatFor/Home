@@ -56,50 +56,52 @@
 
 @keyframes banana-anim {
     from {
-        bottom: -100px;
-        left: -300px;
+        transform: translate(-400px, 1000px);
     }
 
     to {
-        bottom: 5200px;
-        left: 5000px;
+        transform: translate(5500px, -5000px);
     }
 }
 
 @keyframes strawberry-anim {
     from {
-        bottom: -1200px;
-        left: -500px;
+        transform: translate(-900px, 2000px);
     }
 
     to {
-        bottom: 4900px;
-        left: 5300px;
+        transform: translate(5000px, -4000px);
     }
 }
 
 .bg-image {
     z-index: -100;
-    bottom: 0;
-    left: -1000px;
+    top: 0;
+    left: 0;
     position: fixed;
-    transition: transform 200ms ease;
+    transform-origin: center;
     cursor: pointer;
 
     filter: drop-shadow(8px 8px 0px black);
 
-    &:hover {
-        transform: scale(1.03) rotate(5deg);
-        filter: drop-shadow(10px 10px 1px black);
+    & img {
+        transition: transform 200ms ease;
+
+        &:hover {
+            transform: scale(1.03) rotate(5deg);
+            filter: drop-shadow(10px 10px 1px black);
+        }
     }
 }
 
-@media (prefers-reduced-motion: no-preference) and (min-width: 800px) {
+@media (prefers-reduced-motion: no-preference) {
     #strawberry-bg {
-        animation: 358s linear infinite normal strawberry-anim;
+        will-change: transform;
+        animation: 350s linear infinite normal strawberry-anim;
     }
 
     #banana-bg {
-        animation: 320s linear infinite normal banana-anim;
+        will-change: transform;
+        animation: 350s linear infinite normal banana-anim;
     }
 }
