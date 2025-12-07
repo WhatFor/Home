@@ -16,6 +16,7 @@
         <div class="bg-image" id="banana-bg">
             <img
                 alt="banana"
+                draggable="false"
                 aria-hidden="true"
                 src="assets/images/banana.webp"
             />
@@ -23,13 +24,14 @@
         <div class="bg-image" id="strawberry-bg">
             <img
                 alt="strawberry"
+                draggable="false"
                 aria-hidden="true"
                 src="assets/images/strawberry.webp"
             />
         </div>
         <header>
             <h1 id="whatfor">
-                <a href="/">
+                <a href="/" draggable="false">
                     <span>w</span>
                     <span>h</span>
                     <span>a</span>
@@ -170,6 +172,15 @@
                     <feMergeNode in="combined" />
                     <feMergeNode in="SourceGraphic" />
                 </feMerge>
+            </filter>
+            <filter id="noise">
+                <feTurbulence
+                    type="fractalNoise"
+                    baseFrequency="0.5"
+                    numOctaves="2"
+                    stitchTiles="stitch"
+                />
+                <feBlend in="SourceGraphic" in2="noise" mode="normal" />
             </filter>
         </defs>
     </svg>

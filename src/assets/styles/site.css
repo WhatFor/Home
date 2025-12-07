@@ -75,27 +75,21 @@ html {
 }
 
 #bg-tiles {
-    z-index: -110;
+    z-index: -105;
     position: fixed;
-    top: -100px;
-    bottom: -100px;
-    left: -100px;
-    right: -100px;
+    top: 0;
+    left: 0;
+    width: 100lvw;
+    height: 100lvh;
 
-    --bg: aqua;
-    background-image:
-        linear-gradient(45deg, var(--bg) 25%, transparent 25%),
-        linear-gradient(135deg, var(--bg) 25%, transparent 25%),
-        linear-gradient(225deg, var(--bg) 25%, transparent 25%),
-        linear-gradient(315deg, var(--bg) 25%, transparent 25%);
+    filter: url(#noise) contrast(120%) brightness(180%);
 
-    background-size: 100px 100px;
-    background-repeat: repeat;
-
-    @media (prefers-reduced-motion: no-preference) {
-        will-change: transform;
-        animation: bg-move 6s linear infinite;
-    }
+    background-image: linear-gradient(
+        to bottom,
+        color(from darkslateblue srgb r g b / 0.8) 0%,
+        color(from firebrick srgb r g b / 0.8) 100%
+    );
+    background-size: 100% 100%;
 }
 
 *::selection {
@@ -176,6 +170,11 @@ a {
     }
 }
 
+p {
+    line-height: 1.7em;
+    margin-bottom: 2ch;
+}
+
 h1,
 h2,
 h3,
@@ -206,4 +205,50 @@ h6 {
 
 table {
     width: 100%;
+}
+
+@keyframes bounce-on-it-yo {
+    0% {
+        transform: translateY(-5px) rotate(30deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(30deg);
+    }
+}
+
+mark[rainbow-silly] {
+    position: relative;
+    /*color: darkred;*/
+    /*background-color: lemonchiffon;*/
+    /*padding: 0.1ch 0.5ch;*/
+    /*box-shadow: maroon -4px 4px;*/
+    /*border: 1px solid tan;*/
+    /*border-radius: 10% 10% / 10% 10%;*/
+
+    background: linear-gradient(
+        90deg,
+        firebrick 0%,
+        gold 33%,
+        deepskyblue 66%,
+        darkseagreen 100%
+    );
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    &::after {
+        position: absolute;
+        top: -18px;
+        right: -15px;
+        content: "🤪";
+        user-select: none;
+        pointer-events: none;
+        color: initial;
+        -webkit-text-fill-color: initial;
+
+        will-change: transform;
+        animation: 0.5s cubic-bezier(0.5, 0.05, 1, 0.5) infinite alternate
+            bounce-on-it-yo;
+    }
 }
