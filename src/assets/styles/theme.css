@@ -1,0 +1,236 @@
+:root {
+    --rem: 12pt;
+    --width: 50rem;
+    --font-body: 1em/1 Tahoma, Helvetica, sans-serif;
+    --font-head: 1.3em/1.5 "Pixelify Sans Variable", "Palatino", sans-serif;
+    --font-code: 1em/1.4 Monaco, monospace;
+
+    --font-pixel-family:
+        "Pixelify Sans Variable", "Courier New", Courier, monospace;
+
+    --space-s: 0.4em;
+    --space-m: 0.8em;
+    --space-l: 1.6em;
+
+    --colour-bg: ghostwhite;
+    --colour-light: white;
+    --colour-muted: darkgrey;
+    --colour-dark: black;
+
+    --box-shadow-hard-black: 10px 10px 0px black;
+
+    --border-default: 4px solid darkslateblue;
+}
+
+@font-face {
+    font-family: "Pixelify Sans Variable";
+    src: url("../fonts/pixelify-sans-latin-400-normal.woff2") format("woff");
+    font-display: swap;
+}
+
+html {
+    font-size: var(--rem);
+    background: var(--colour-bg);
+    height: 100%;
+    cursor: url("../images/cursor.png"), auto;
+}
+
+*::selection {
+    color: darkmagenta;
+    background-color: gold;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    margin: auto;
+    min-height: 100%;
+    max-width: var(--width);
+    font: var(--font-body);
+    color: var(--colour-dark);
+    padding: 3rem 1.3rem 0;
+    overflow-x: hidden;
+
+    header {
+        pointer-events: none;
+
+        & * {
+            pointer-events: initial;
+        }
+
+        nav {
+            ul {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+
+                @media (width > 600px) {
+                    grid-template-columns: repeat(4, 1fr);
+                }
+
+                list-style: none;
+                font-family: var(--font-pixel-family);
+                font-size: 2em;
+                line-height: 1.2em;
+                text-align: center;
+
+                background-image: url("../images/head.jpg");
+                border: var(--border-default);
+                box-shadow: var(--box-shadow-hard-black);
+
+                li {
+                    flex-basis: 0;
+                    flex-grow: 1;
+
+                    & a {
+                        display: inline-block;
+                        width: 100%;
+                        mix-blend-mode: difference;
+                        color: white;
+                        text-decoration: none;
+
+                        &:hover {
+                            color: black;
+                            background-color: yellow;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    main article,
+    footer {
+        background-color: ivory;
+        border: var(--border-default);
+        padding: 15px 20px;
+        box-shadow: var(--box-shadow-hard-black);
+        margin-bottom: var(--space-l);
+
+        a {
+            color: unset;
+            text-decoration-style: dashed;
+
+            &:hover {
+                color: red;
+            }
+        }
+    }
+
+    footer {
+        padding: 10px 15px;
+        margin-top: auto;
+
+        & p {
+            font-size: 0.9em;
+            margin-bottom: 1ch;
+        }
+    }
+}
+
+p {
+    line-height: 1.7em;
+    margin-bottom: 2ch;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font: var(--font-head);
+    line-height: 1.1em;
+    margin-bottom: 1ch;
+
+    &::before {
+        content: "@";
+        margin-right: 0.5ch;
+    }
+}
+
+h1 {
+    font-size: 3.5em;
+}
+
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4,
+h5,
+h6 {
+    font-size: 1.1em;
+}
+
+table {
+    width: 100%;
+}
+
+#bg {
+    z-index: -105;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100lvh;
+    width: 100lvw;
+    filter: url(#noise) contrast(120%) brightness(180%);
+    background-image: linear-gradient(
+        to bottom,
+        color(from darkslateblue srgb r g b / 0.8) 0%,
+        color(from firebrick srgb r g b / 0.8) 100%
+    );
+}
+
+site-title {
+    letter-spacing: -0.05em;
+    margin: 0 auto;
+    text-align: center;
+    padding: 24px 0;
+    font-family: var(--font-pixel-family);
+    font-size: 5em;
+
+    @media (max-width: 500px) {
+        padding: 24px 20px;
+        font-size: 3.5em;
+    }
+
+    & span {
+        display: inline-block;
+        vertical-align: baseline;
+        transition: transform 200ms ease;
+        pointer-events: initial;
+
+        &:hover {
+            color: black;
+            text-shadow: white -1px -1px;
+        }
+    }
+
+    & span:nth-child(odd) {
+        transform: translateY(-0.03em);
+
+        &:hover {
+            transform: translateY(0.05em);
+        }
+    }
+
+    & span:nth-child(even) {
+        transform: translateY(0.03em);
+
+        &:hover {
+            transform: translateY(-0.05em);
+        }
+    }
+}
+
+site-title a {
+    color: white;
+    text-decoration: none;
+    text-shadow: black 2px 2px;
+}

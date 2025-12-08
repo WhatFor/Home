@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
@@ -7,31 +6,14 @@
         <meta name="description" content="" />
         <link rel="icon" href="data:;base64,=" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="stylesheet" type="text/css" href="assets/styles/site.css" />
-        <link rel="stylesheet" type="text/css" href="assets/styles/main.css" />
+        <link rel="stylesheet" type="text/css" href="assets/styles/index.css" />
     </head>
-
     <body>
-        <div id="bg-tiles"></div>
-        <div class="bg-image" id="banana-bg">
-            <img
-                alt="banana"
-                draggable="false"
-                aria-hidden="true"
-                src="assets/images/banana.webp"
-            />
-        </div>
-        <div class="bg-image" id="strawberry-bg">
-            <img
-                alt="strawberry"
-                draggable="false"
-                aria-hidden="true"
-                src="assets/images/strawberry.webp"
-            />
-        </div>
+        <div id="bg" aria-hidden="true"></div>
         <header>
-            <h1 id="whatfor">
+            <site-title aria-label="site name - main header.">
                 <a href="/" draggable="false">
+                    <span blue>></span>
                     <span>w</span>
                     <span>h</span>
                     <span>a</span>
@@ -40,17 +22,20 @@
                     <span>o</span>
                     <span>r</span>
                 </a>
-            </h1>
+            </site-title>
             <nav>
                 <ul>
                     <li>
-                        <a href="opinions.html">Opinions</a>
+                        <a href="opinions.html">OPINIONS</a>
                     </li>
                     <li>
-                        <a href="posts.html">Posts</a>
+                        <a href="posts.html">POSTS</a>
                     </li>
                     <li>
-                        <a href="links.html">Links</a>
+                        <a href="links.html">LINKS</a>
+                    </li>
+                    <li>
+                        <a href="stuff.html">STUFF</a>
                     </li>
                 </ul>
             </nav>
@@ -119,60 +104,8 @@
             </div>
         </footer>
     </body>
-
     <svg style="width: 0; height: 0; position: absolute">
         <defs>
-            <filter id="bubble-outline">
-                <!-- first bubble -->
-                <feMorphology in="SourceAlpha" operator="dilate" result="d">
-                    <animate
-                        attributeName="radius"
-                        values="2;7;2"
-                        dur="2s"
-                        repeatCount="indefinite"
-                    />
-                </feMorphology>
-                <feGaussianBlur in="d" stdDeviation="11" result="b" />
-                <feComponentTransfer in="b" result="f">
-                    <feFuncR type="discrete" tableValues="0 1 1 1" />
-                    <feFuncG type="discrete" tableValues="0 1 1 1" />
-                    <feFuncB type="discrete" tableValues="0 1 1 1" />
-                    <feFuncA type="discrete" tableValues="0 1 1 1" />
-                </feComponentTransfer>
-                <feFlood flood-color="red" result="c" />
-                <feComposite in="c" in2="f" operator="in" result="o" />
-
-                <!-- 2nd bubble -->
-                <feMorphology in="SourceAlpha" operator="dilate" result="d2">
-                    <animate
-                        attributeName="radius"
-                        values="4;14;4"
-                        dur="2s"
-                        repeatCount="indefinite"
-                    />
-                </feMorphology>
-                <feGaussianBlur in="d2" stdDeviation="12" result="b2" />
-                <feComponentTransfer in="b2" result="f2">
-                    <feFuncR type="discrete" tableValues="0 1 1 1" />
-                    <feFuncG type="discrete" tableValues="0 1 1 1" />
-                    <feFuncB type="discrete" tableValues="0 1 1 1" />
-                    <feFuncA type="discrete" tableValues="0 1 1 1" />
-                </feComponentTransfer>
-                <feFlood flood-color="darkred" result="c2" />
-                <feComposite in="c2" in2="f2" operator="in" result="o2" />
-
-                <!-- combine both bubbles -->
-                <feMerge out="combined">
-                    <feMergeNode in="o2" />
-                    <feMergeNode in="o" />
-                </feMerge>
-
-                <!-- draw back onto text -->
-                <feMerge out="merged">
-                    <feMergeNode in="combined" />
-                    <feMergeNode in="SourceGraphic" />
-                </feMerge>
-            </filter>
             <filter id="noise">
                 <feTurbulence
                     type="fractalNoise"

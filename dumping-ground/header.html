@@ -1,0 +1,125 @@
+<h1 id="whatfor">
+    <a href="/" draggable="false">
+        <span>w</span>
+        <span>h</span>
+        <span>a</span>
+        <span>t</span>
+        <span>f</span>
+        <span>o</span>
+        <span>r</span>
+    </a>
+</h1>
+<svg style="width: 0; height: 0; position: absolute">
+    <defs>
+        <filter id="bubble-outline">
+            <!-- first bubble -->
+            <feMorphology in="SourceAlpha" operator="dilate" result="d">
+                <animate
+                    attributeName="radius"
+                    values="2;7;2"
+                    dur="2s"
+                    repeatCount="indefinite"
+                />
+            </feMorphology>
+            <feGaussianBlur in="d" stdDeviation="11" result="b" />
+            <feComponentTransfer in="b" result="f">
+                <feFuncR type="discrete" tableValues="0 1 1 1" />
+                <feFuncG type="discrete" tableValues="0 1 1 1" />
+                <feFuncB type="discrete" tableValues="0 1 1 1" />
+                <feFuncA type="discrete" tableValues="0 1 1 1" />
+            </feComponentTransfer>
+            <feFlood flood-color="red" result="c" />
+            <feComposite in="c" in2="f" operator="in" result="o" />
+
+            <!-- 2nd bubble -->
+            <feMorphology in="SourceAlpha" operator="dilate" result="d2">
+                <animate
+                    attributeName="radius"
+                    values="4;14;4"
+                    dur="2s"
+                    repeatCount="indefinite"
+                />
+            </feMorphology>
+            <feGaussianBlur in="d2" stdDeviation="12" result="b2" />
+            <feComponentTransfer in="b2" result="f2">
+                <feFuncR type="discrete" tableValues="0 1 1 1" />
+                <feFuncG type="discrete" tableValues="0 1 1 1" />
+                <feFuncB type="discrete" tableValues="0 1 1 1" />
+                <feFuncA type="discrete" tableValues="0 1 1 1" />
+            </feComponentTransfer>
+            <feFlood flood-color="darkred" result="c2" />
+            <feComposite in="c2" in2="f2" operator="in" result="o2" />
+
+            <!-- combine both bubbles -->
+            <feMerge out="combined">
+                <feMergeNode in="o2" />
+                <feMergeNode in="o" />
+            </feMerge>
+
+            <!-- draw back onto text -->
+            <feMerge out="merged">
+                <feMergeNode in="combined" />
+                <feMergeNode in="SourceGraphic" />
+            </feMerge>
+        </filter>
+    </defs>
+</svg>
+
+<style>
+    #whatfor {
+        letter-spacing: -0.05em;
+        margin: 0 auto;
+        text-align: center;
+        padding: 24px 0;
+        font-family: var(--font-pixel-family);
+        pointer-events: none;
+        font-size: 5em;
+
+        @media (max-width: 500px) {
+            padding: 24px 20px;
+            font-size: 3.5em;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+            filter: url(#bubble-outline);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            background-color: black;
+        }
+
+        & span {
+            display: inline-block;
+            vertical-align: baseline;
+            transition: transform 200ms ease;
+            pointer-events: initial;
+
+            &:hover {
+                color: black;
+                text-shadow: white -1px -1px;
+            }
+        }
+
+        & span:nth-child(odd) {
+            transform: translateY(-0.03em);
+
+            &:hover {
+                transform: translateY(0.05em);
+            }
+        }
+
+        & span:nth-child(even) {
+            transform: translateY(0.03em);
+
+            &:hover {
+                transform: translateY(-0.05em);
+            }
+        }
+    }
+
+    #whatfor a {
+        color: white;
+        text-decoration: none;
+        text-shadow: black 2px 2px;
+    }
+</style>
