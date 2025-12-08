@@ -54,13 +54,11 @@ body {
     overflow-x: hidden;
 
     header {
-        pointer-events: none;
-
-        & * {
-            pointer-events: initial;
-        }
+        margin-bottom: var(--space-l);
 
         nav {
+            margin-top: var(--space-s);
+
             ul {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
@@ -116,6 +114,20 @@ body {
                 color: red;
             }
         }
+
+        ul {
+            display: flex;
+            flex-direction: column;
+            row-gap: 10px;
+            list-style-position: inside;
+            list-style-type: circle;
+        }
+    }
+
+    main article {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
     }
 
     footer {
@@ -131,7 +143,6 @@ body {
 
 p {
     line-height: 1.7em;
-    margin-bottom: 2ch;
 }
 
 h1,
@@ -142,7 +153,6 @@ h5,
 h6 {
     font: var(--font-head);
     line-height: 1.1em;
-    margin-bottom: 1ch;
 
     &::before {
         content: "@";
