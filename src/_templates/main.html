@@ -10,6 +10,29 @@
     </head>
     <body>
         <div id="bg" aria-hidden="true"></div>
+        <trim-container>
+            <img pixel trim top-left src="../assets/images/trim_base_top.png" />
+            <img
+                pixel
+                trim
+                top-right
+                src="../assets/images/trim_base_top.png"
+            />
+            <img
+                pixel
+                trim
+                bottom-left
+                src="../assets/images/trim_base_bottom.png"
+            />
+            <img
+                pixel
+                trim
+                bottom-right
+                src="../assets/images/trim_base_bottom.png"
+            />
+            <div pixel trim left></div>
+            <div pixel trim right></div>
+        </trim-container>
         <header>
             <site-title aria-label="site name - main header.">
                 <a href="/" draggable="false">
@@ -109,7 +132,7 @@
             <filter id="noise">
                 <feTurbulence
                     type="fractalNoise"
-                    baseFrequency="0.5"
+                    baseFrequency="0.7"
                     numOctaves="2"
                     stitchTiles="stitch"
                 />

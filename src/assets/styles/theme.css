@@ -189,7 +189,7 @@ table {
     left: 0;
     height: 100lvh;
     width: 100lvw;
-    filter: url(#noise) contrast(120%) brightness(180%);
+    filter: url(#noise) contrast(130%) brightness(150%);
     background-image: linear-gradient(
         to bottom,
         color(from darkslateblue srgb r g b / 0.8) 0%,
@@ -243,4 +243,101 @@ site-title a {
     color: white;
     text-decoration: none;
     text-shadow: black 2px 2px;
+}
+
+trim-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    &::after {
+        content: "";
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        z-index: -90;
+
+        box-shadow:
+            inset 20px 0 20px -20px rgb(30, 30, 30),
+            inset -20px 0 20px -20px rgb(30, 30, 30);
+    }
+}
+
+*[trim] {
+    @media (width < 1000px) {
+        display: none;
+    }
+
+    &[pixel] {
+        image-rendering: pixelated;
+    }
+}
+
+img {
+    &[pixel] {
+        aspect-ratio: 1 / 1;
+    }
+
+    &[trim] {
+        position: fixed;
+        z-index: -95;
+    }
+
+    &[trim][bottom-left] {
+        bottom: 0;
+        left: 0;
+        width: 200px;
+    }
+
+    &[trim][bottom-right] {
+        bottom: 0;
+        right: 0;
+        width: 200px;
+        transform: scaleX(-1);
+    }
+
+    &[trim][top-left] {
+        top: 0;
+        left: 0;
+        width: 200px;
+    }
+
+    &[trim][top-right] {
+        top: 0;
+        right: 0;
+        width: 200px;
+        transform: scaleX(-1);
+    }
+}
+
+div {
+    &[pixel] {
+        image-rendering: pixelated;
+    }
+
+    &[trim] {
+        position: fixed;
+        z-index: -95;
+
+        background-size: 100%;
+        background-image: url("../images/trim_edge.png");
+        background-repeat: repeat-y;
+    }
+
+    &[trim][left] {
+        left: 0;
+        top: 200px;
+        bottom: 200px;
+        width: 200px;
+    }
+
+    &[trim][right] {
+        right: 0;
+        top: 200px;
+        bottom: 200px;
+        width: 200px;
+        transform: scaleX(-1);
+    }
 }
