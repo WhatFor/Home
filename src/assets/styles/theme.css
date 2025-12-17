@@ -20,6 +20,9 @@
     --box-shadow-hard-black: 10px 10px 0px black;
 
     --border-default: 4px solid darkslateblue;
+
+    --trim-width: 256px;
+    --trim-height: 256px;
 }
 
 @font-face {
@@ -251,17 +254,21 @@ trim-container {
     bottom: 0;
     left: 0;
     right: 0;
+    z-index: -90;
+    pointer-events: none;
 
-    &::after {
-        content: "";
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        z-index: -90;
+    @media (width > 1000px) {
+        &::after {
+            content: "";
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -90;
 
-        box-shadow:
-            inset 20px 0 20px -20px rgb(30, 30, 30),
-            inset -20px 0 20px -20px rgb(30, 30, 30);
+            box-shadow:
+                inset 20px 0 20px -20px rgb(40, 40, 40),
+                inset -20px 0 20px -20px rgb(40, 40, 40);
+        }
     }
 }
 
@@ -282,33 +289,34 @@ img {
 
     &[trim] {
         position: fixed;
-        z-index: -95;
     }
 
     &[trim][bottom-left] {
         bottom: 0;
         left: 0;
-        width: 200px;
+        z-index: -95;
+        width: var(--trim-width);
     }
 
     &[trim][bottom-right] {
         bottom: 0;
         right: 0;
-        width: 200px;
-        transform: scaleX(-1);
+        z-index: -95;
+        width: var(--trim-width);
     }
 
     &[trim][top-left] {
         top: 0;
         left: 0;
-        width: 200px;
+        z-index: -95;
+        width: var(--trim-width);
     }
 
     &[trim][top-right] {
         top: 0;
         right: 0;
-        width: 200px;
-        transform: scaleX(-1);
+        z-index: -95;
+        width: var(--trim-width);
     }
 }
 
@@ -322,22 +330,22 @@ div {
         z-index: -95;
 
         background-size: 100%;
-        background-image: url("../images/trim_edge.png");
+        background-image: url("../images/Trim.png");
         background-repeat: repeat-y;
     }
 
     &[trim][left] {
         left: 0;
-        top: 200px;
-        bottom: 200px;
-        width: 200px;
+        top: var(--trim-height);
+        bottom: var(--trim-height);
+        width: var(--trim-width);
     }
 
     &[trim][right] {
         right: 0;
-        top: 200px;
-        bottom: 200px;
-        width: 200px;
+        top: var(--trim-height);
+        bottom: var(--trim-height);
+        width: var(--trim-width);
         transform: scaleX(-1);
     }
 }
