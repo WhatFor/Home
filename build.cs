@@ -32,8 +32,9 @@ bool IsBuildPath(string path)
 
 string ReplaceLeadingPathSegment(string path, string segment, string replacement)
 {
-    var dir = Path.GetDirectoryName(path)! + "\\";
-    var trimmedDir = dir.Replace(segment, replacement);
+    var dir = Path.GetDirectoryName(path)! + "/";
+    var dirSanitisedSlashes = dir.Replace("\\", "/");
+    var trimmedDir = dirSanitisedSlashes.Replace(segment, replacement);
 
     var fileName = Path.GetFileName(path);
 
@@ -93,7 +94,7 @@ var pagesHtml = Directory
     {
         Name = Path.GetFileName(f),
         Content = File.ReadAllText(f),
-        OutputDir = ReplaceLeadingPathSegment(f, ".\\src\\", ".\\"),
+        OutputDir = ReplaceLeadingPathSegment(f, "./src/", "./"),
     })
     .ToList();
 
