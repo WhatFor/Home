@@ -181,6 +181,11 @@ h6 {
     font-size: 1.1em;
 }
 
+time {
+    font: var(--font-code);
+    color: midnightblue;
+}
+
 table {
     width: 100%;
 }
@@ -348,4 +353,9 @@ div {
         width: var(--trim-width);
         transform: scaleX(-1);
     }
+}
+
+object.email {
+    height: 2em;
+    margin: -1em 0;
 }
