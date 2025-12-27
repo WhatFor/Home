@@ -1,6 +1,6 @@
 // Variables
 const string POSTS_DIR = "./src/posts/";
-const string POST_TEMPLATE = "./src/_templates/posts.html";
+const string POST_TEMPLATE = "./src/_templates/main.html";
 const string POSTS_DIR_OUTPUT = "./dist/posts";
 
 const string PAGES_DIR = "./src/";
@@ -60,6 +60,60 @@ string ReadTemplate(string path)
     return templateHtml;
 }
 
+Post ParsePost(string path)
+{
+    var fileName = Path.GetFileName(path);
+    var allContent = File.ReadAllText(path);
+
+    var hasFrontMatter = allContent.StartsWith("---");
+
+    if (hasFrontMatter)
+    {
+        var sr = new System.IO.StringReader(allContent);
+        sr.ReadLine(); // Skip 1st frontmatter line.
+
+        List<string> frontMatterLines = [];
+        var atEnd = false;
+
+        while (!atEnd)
+        {
+            var nextLine = sr.ReadLine();
+
+            if (nextLine == "---")
+                atEnd = true;
+
+            frontMatterLines.Add(nextLine);
+        }
+
+        var restOfFile = sr.ReadToEnd();
+
+        var dict = frontMatterLines
+            .Where(l => !string.IsNullOrWhiteSpace(l))
+            .Where(l => l.Contains(":"))
+            .Select(l => l.Split(":"))
+            .ToDictionary(l => l[0].Trim(), l => l[1].Trim());
+
+        return new Post
+        {
+            FileName = fileName,
+            HtmlContent = restOfFile,
+            FrontMatterTitle = dict["title"],
+            FrontMatterDescription = dict["description"],
+            FrontMatterDate = dict["date"],
+        };
+    }
+
+    // No frontmatter
+    return new Post
+    {
+        FileName = fileName,
+        HtmlContent = "",
+        FrontMatterTitle = fileName,
+        FrontMatterDescription = "",
+        FrontMatterDate = "",
+    };
+}
+
 // Setup
 Directory.CreateDirectory(POSTS_DIR_OUTPUT);
 
@@ -67,15 +121,15 @@ var postTemplate = ReadTemplate(POST_TEMPLATE);
 var mainTemplate = ReadTemplate(MAIN_TEMPLATE);
 
 // Build posts
-var postsHtml = Directory
+var posts = Directory
     .GetFiles(POSTS_DIR, "*.html")
-    .Select(f => new { Name = Path.GetFileName(f), Content = File.ReadAllText(f) });
+    .Select(f => ParsePost(f));
 
-foreach (var post in postsHtml)
+foreach (var post in posts)
 {
-    Console.WriteLine($"Post: {post.Name}");
-    var postOutput = postTemplate.Replace(BODY_PLACEHOLDER, post.Content);
-    var outputFile = Path.Combine(POSTS_DIR_OUTPUT, post.Name);
+    Console.WriteLine($"Post: {post.FileName}");
+    var postOutput = postTemplate.Replace(BODY_PLACEHOLDER, post.HtmlContent);
+    var outputFile = Path.Combine(POSTS_DIR_OUTPUT, post.FileName);
 
     File.WriteAllText(outputFile, postOutput);
 }
@@ -109,11 +163,23 @@ foreach (var page in pagesHtml)
     // Special handling for the posts.html listing page
     if (page.Name == "posts.html")
     {
-        var listing = string.Join(
-            "\r\n",
-            postsHtml.Select(p => $"<a href='posts/{p.Name}'>{Path.GetFileNameWithoutExtension(p.Name)}</a>"));
+        var sb = new System.Text.StringBuilder();
 
-        pageOutput = pageOutput.Replace(POSTS_PLACEHOLDER, listing);
+        foreach (var post in posts)
+        {
+            sb.Append(@$"
+                <a href='posts/{post.FileName}'>
+                    <div post-card>
+                        <h2>{post.FrontMatterTitle}</h2>
+                        <time>{post.FrontMatterDate}</time>
+                        <p>{post.FrontMatterDescription}</p>
+                    </div>
+                </a>");
+
+            sb.Append("\r\n");
+        }
+
+        pageOutput = pageOutput.Replace(POSTS_PLACEHOLDER, sb.ToString());
     }
 
     var outputFile = Path.Combine(PAGES_DIR_OUTPUT, page.OutputDir);
@@ -138,3 +204,12 @@ foreach (var assetFile in Directory.GetFiles(ASSETS_DIR, "*", new EnumerationOpt
 
 // Output robots.txt
 File.Copy(Path.Combine(PAGES_DIR, "robots.txt"), Path.Combine(PAGES_DIR_OUTPUT, "robots.txt"), overwrite: true);
+
+public class Post
+{
+    public string FileName { get; set; }
+    public string HtmlContent { get; set; }
+    public string FrontMatterTitle { get; set; }
+    public string FrontMatterDescription { get; set; }
+    public string FrontMatterDate { get; set; }
+}

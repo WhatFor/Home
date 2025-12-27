@@ -1,23 +1,16 @@
-<article>
-    <header>
-        <h1>CSV Generation with CsvHelper in .NET</h1>
+---
+title: CSV Generation with CsvHelper in .NET
+description: Streaming CSV content from the DB to the client without buffering
+date: 2025-12-27
+---
 
-        <h2>
-            Streaming CSV content from the DB to the client without buffering
-        </h2>
-        <hr />
-        <ul>
-            <li>.NET</li>
-            <li>Performance</li>
-        </ul>
-    </header>
-    <main>
-        <p>
-            Historically, generating and returning a CSV file via .NET with
-            CsvHelper might look something like:
-        </p>
-
-        <pre><code>
+<article post>
+    <h2>CSV Generation with CsvHelper in .NET</h2>
+    <p>
+        Historically, generating and returning a CSV file via .NET with
+        CsvHelper might look something like:
+    </p>
+    <pre><code>
 var dapper = new Dapper(new SqlConnection("..")); // Connection string
 var query = "SELECT * FROM Users";
 var data = await dapper.QueryAsync&lt;ReportRow&gt;(query);
@@ -31,51 +24,39 @@ streamWriter.Flush();
 memoryStream.Seek(0, SeekOrigin.Begin);
 
 return File(memoryStream, "text/csv", "my-report.csv");
-              </code></pre>
-
-        <p>
-            This works well enough, but has some important considerations that
-            don't become apparent when working with small files or low traffic.
-        </p>
-
-        <hr />
-
-        <h2>The Problem</h2>
-        <p>Given the above snippet, we can draw some observations:</p>
-        <ul>
-            <li>
-                All of the data is buffered from the database via
-                <code>dapper.QueryAsync</code>, and is all allocated to the data
-                array. This also blocks execution until fully buffered, meaning
-                the code won't continue until everything has been read from the
-                DB.
-            </li>
-            <li>
-                The entire data array is written to the
-                <code>memoryStream</code> sequentially and in a blocking
-                fashion. Execution won't continue until all rows are written.
-            </li>
-            <li>
-                This entire process is sequential. The HTTP file result won't
-                start returning to the client browser until all prior steps are
-                complete.
-            </li>
-        </ul>
-
-        <p>
-            Overall, this is a lot of waiting around as we gradually step
-            through each part of the code.
-        </p>
-
-        <hr />
-
-        <h2>The Solution</h2>
-        <p>
-            With a few small changes, we can gain some nice performance boosts
-            here.
-        </p>
-
-        <pre><code>
+        </code></pre>
+    <p>
+        This works well enough, but has some important considerations that don't
+        become apparent when working with small files or low traffic.
+    </p>
+    <h3>The Problem</h3>
+    <p>Given the above snippet, we can draw some observations:</p>
+    <ul>
+        <li>
+            All of the data is buffered from the database via
+            <code>dapper.QueryAsync</code>, and is all allocated to the data
+            array. This also blocks execution until fully buffered, meaning the
+            code won't continue until everything has been read from the DB.
+        </li>
+        <li>
+            The entire data array is written to the
+            <code>memoryStream</code> sequentially and in a blocking fashion.
+            Execution won't continue until all rows are written.
+        </li>
+        <li>
+            This entire process is sequential. The HTTP file result won't start
+            returning to the client browser until all prior steps are complete.
+        </li>
+    </ul>
+    <p>
+        Overall, this is a lot of waiting around as we gradually step through
+        each part of the code.
+    </p>
+    <h3>The Solution</h3>
+    <p>
+        With a few small changes, we can gain some nice performance boosts here.
+    </p>
+    <pre><code>
 var sqlConnection = new SqlConnection(".."); // Connection string
 var query = "SELECT * FROM Users";
 var data = sqlConnection.QueryUnbufferedAsync&lt;ReportRow&gt;(query);
@@ -101,59 +82,51 @@ await using (var csvWriter = new CsvWriter(streamWriter))
 
 return new EmptyResult();
               </code></pre>
-
-        <p>What we have changed is:</p>
-        <ul>
-            <li>
-                Swapped to using <code>QueryUnbufferedAsync</code> from Dapper.
-                This returns an <code>IAsyncEnumerable&lt;T&gt;</code> and lets
-                us continue on with our execution.
-            </li>
-            <li>
-                Instead of writing to a new <code>MemoryStream</code> to hold
-                our formatted output, write directly to the
-                <code>Response.Body</code> stream.
-            </li>
-            <li>
-                Consume our <code>IAsyncEnumerable</code> to write directly to
-                the <code>CsvWriter</code> in an <code>await foreach</code>,
-                making full use of the async power we've gained.
-            </li>
-            <li>
-                Manually formatting the Response properties that were previously
-                handled by <code>return File(...)</code>, such as
-                <code>StatusCode</code>, <code>ContentType</code>, etc.
-            </li>
-        </ul>
-
-        <hr />
-
-        <h2>Why?</h2>
-        <p>With the above changes...</p>
-        <ul>
-            <li>
-                Our execution continues throughout the code, not blocking on any
-                one particular line of code. Ultimately, the final
-                <code>return new EmptyResult()</code> executes very quickly
-                (~20ms after Controller invocation) while the file continues to
-                be streamed to completion afterwards.
-            </li>
-            <li>
-                We don't allocate and re-allocate different collections or
-                memory streams. There's no wasted memory here. As an added
-                side-effect, we're never allocating the entire data set at once.
-                This allows us to generate and return files of limitless size!
-            </li>
-        </ul>
-
-        <hr />
-
-        <h2>How?</h2>
-        <p>
-            This, under the hood, makes use of the
-            <code>chunked Transfer-Encoding</code> header, which is essentially
-            streaming. It omits the <code>Content-Length</code> header, and
-            instead just streams all the data to completion.
-        </p>
-    </main>
+    <p>What we have changed is:</p>
+    <ul>
+        <li>
+            Swapped to using <code>QueryUnbufferedAsync</code> from Dapper. This
+            returns an <code>IAsyncEnumerable&lt;T&gt;</code> and lets us
+            continue on with our execution.
+        </li>
+        <li>
+            Instead of writing to a new <code>MemoryStream</code> to hold our
+            formatted output, write directly to the
+            <code>Response.Body</code> stream.
+        </li>
+        <li>
+            Consume our <code>IAsyncEnumerable</code> to write directly to the
+            <code>CsvWriter</code> in an <code>await foreach</code>, making full
+            use of the async power we've gained.
+        </li>
+        <li>
+            Manually formatting the Response properties that were previously
+            handled by <code>return File(...)</code>, such as
+            <code>StatusCode</code>, <code>ContentType</code>, etc.
+        </li>
+    </ul>
+    <h3>Why?</h3>
+    <p>With the above changes...</p>
+    <ul>
+        <li>
+            Our execution continues throughout the code, not blocking on any one
+            particular line of code. Ultimately, the final
+            <code>return new EmptyResult()</code> executes very quickly (~20ms
+            after Controller invocation) while the file continues to be streamed
+            to completion afterwards.
+        </li>
+        <li>
+            We don't allocate and re-allocate different collections or memory
+            streams. There's no wasted memory here. As an added side-effect,
+            we're never allocating the entire data set at once. This allows us
+            to generate and return files of limitless size!
+        </li>
+    </ul>
+    <h3>How?</h3>
+    <p>
+        This, under the hood, makes use of the
+        <code>chunked Transfer-Encoding</code> header, which is essentially
+        streaming. It omits the <code>Content-Length</code> header, and instead
+        just streams all the data to completion.
+    </p>
 </article>
