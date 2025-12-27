@@ -43,6 +43,10 @@ html {
     background-color: gold;
 }
 
+pre {
+    overflow: auto;
+}
+
 body {
     display: flex;
     flex-direction: column;
