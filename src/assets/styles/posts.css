@@ -16,6 +16,7 @@ article[post] {
 
         li {
             margin-bottom: var(--space-s);
+            line-height: 1.7em;
         }
     }
 
